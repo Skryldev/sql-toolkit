@@ -191,6 +191,8 @@ go get github.com/golang-migrate/migrate/v4
 
 کمترین کدی که برای شروع کار نیاز دارید:
 
+<div dir="ltr">
+
 ```go
 package main
 
@@ -225,6 +227,8 @@ func main() {
 }
 ```
 
+<div dir="rtl">
+
 ---
 
 ## 📖 راهنمای کامل استفاده
@@ -232,6 +236,8 @@ func main() {
 ### ۱. باز کردن اتصال به دیتابیس
 
 #### روش اول — پیکربندی مستقیم (توصیه شده)
+
+<div dir="ltr">
 
 ```go
 import (
@@ -259,8 +265,11 @@ if err != nil {
 }
 defer database.Close()
 ```
+<div dir="rtl">
 
 #### روش دوم — استفاده از Environment Variable
+
+<div dir="ltr">
 
 ```go
 // DATABASE_URL به صورت خودکار خوانده می‌شود
@@ -274,8 +283,11 @@ database, err := db.Open(db.Config{
     DriverName: "postgres",
 })
 ```
+<div dir="rtl">
 
 #### روش سوم — MustOpen (برای main.go)
+
+<div dir="ltr">
 
 ```go
 // در صورت خطا panic می‌کند — مناسب برای init اپلیکیشن
@@ -284,8 +296,11 @@ database := db.MustOpen(db.Config{
     DriverName: "postgres",
 })
 ```
+<div dir="rtl">
 
 #### روش چهارم — OpenWithDriver (ساختارمند)
+
+<div dir="ltr">
 
 ```go
 database, err := db.OpenWithDriver("postgres", db.DriverOptions{
@@ -300,8 +315,11 @@ database, err := db.OpenWithDriver("postgres", db.DriverOptions{
     DefaultTimeout: 10 * time.Second,
 })
 ```
+<div dir="rtl">
 
 #### Health Check
+
+<div dir="ltr">
 
 ```go
 // بررسی سلامت اتصال
@@ -314,12 +332,15 @@ stats := database.Stats()
 log.Printf("اتصال‌های باز: %d، idle: %d، در استفاده: %d",
     stats.OpenConnections, stats.Idle, stats.InUse)
 ```
+<div dir="rtl">
 
 ---
 
 ### ۲. اجرای Query ها
 
 #### Exec — برای INSERT، UPDATE، DELETE، DDL
+
+<div dir="ltr">
 
 ```go
 // INSERT ساده
@@ -347,8 +368,11 @@ _, err = database.Exec(ctx,
     time.Now(),
 )
 ```
+<div dir="rtl">
 
 #### QueryRow — یک ردیف
+
+<div dir="ltr">
 
 ```go
 // SELECT یک مقدار
@@ -375,8 +399,11 @@ if err != nil {
     return nil, err
 }
 ```
+<div dir="rtl">
 
 #### Query — چند ردیف
+
+<div dir="ltr">
 
 ```go
 rows, err := database.Query(ctx, `
@@ -407,8 +434,11 @@ if err := rows.Err(); err != nil {
 
 return users, nil
 ```
+<div dir="rtl">
 
 #### Prepare — Prepared Statement (برای query های تکراری)
+
+<div dir="ltr">
 
 ```go
 // ساخت prepared statement
@@ -427,12 +457,15 @@ for _, email := range emails {
     // ...
 }
 ```
+<div dir="rtl">
 
 ---
 
 ### ۳. مدیریت Transaction
 
 #### ExecTx — ساده‌ترین روش (توصیه شده)
+
+<div dir="ltr">
 
 ```go
 // انتقال موجودی بین دو حساب
@@ -467,8 +500,11 @@ err := database.ExecTx(ctx, func(tx *db.Tx) error {
 
 }) // panic نیز باعث ROLLBACK می‌شود
 ```
+<div dir="rtl">
 
 #### Transaction با Isolation Level سفارشی
+
+<div dir="ltr">
 
 ```go
 err := database.ExecTx(ctx, func(tx *db.Tx) error {
@@ -496,8 +532,11 @@ err := database.ExecTx(ctx, func(tx *db.Tx) error {
     ReadOnly:  false,
 })
 ```
+<div dir="rtl">
 
 #### Panic در Transaction
+
+<div dir="ltr">
 
 ```go
 // حتی اگر panic رخ دهد، ROLLBACK انجام می‌شود
@@ -518,6 +557,8 @@ err := database.ExecTx(ctx, func(tx *db.Tx) error {
 هم `*DB` و هم `*Tx` این interface را پیاده‌سازی می‌کنند، بنابراین Repository ها در هر دو context کار می‌کنند.
 
 #### تعریف interface
+
+<div dir="ltr">
 
 ```go
 // repo/user_repo.go
@@ -540,8 +581,11 @@ func NewUserRepo(q db.Querier) UserRepository {
     return &userRepo{q: q}
 }
 ```
+<div dir="rtl">
 
 #### پیاده‌سازی با SQL های explicit
+
+<div dir="ltr">
 
 ```go
 // SQL ها به عنوان ثابت تعریف می‌شوند — کاملاً قابل مشاهده
@@ -563,8 +607,11 @@ func (r *userRepo) GetByID(ctx context.Context, id int64) (*User, error) {
     return u, nil
 }
 ```
+<div dir="rtl">
 
 #### Update جزئی (Partial Update)
+
+<div dir="ltr">
 
 ```go
 // پارامترهای Update با pointer — فقط فیلدهای غیر nil به‌روز می‌شوند
@@ -618,8 +665,11 @@ func (r *userRepo) Update(ctx context.Context, params UpdateUserParams) (*User, 
     return u, err
 }
 ```
+<div dir="rtl">
 
 #### استفاده در Service Layer
+
+<div dir="ltr">
 
 ```go
 // service/user_service.go
@@ -658,12 +708,15 @@ func (s *UserService) RegisterWithProfile(ctx context.Context, input RegisterInp
     })
 }
 ```
+<div dir="rtl">
 
 ---
 
 ### ۵. مدیریت خطا با Type Safety
 
 #### Sentinel Error ها
+
+<div dir="ltr">
 
 ```go
 // خطاهای آماده که errors.Is() روی آن‌ها کار می‌کند:
@@ -675,8 +728,11 @@ db.ErrTimeout            // query از زمان مجاز تجاوز کرد
 db.ErrCheckViolation     // نقض CHECK constraint
 db.ErrConnectionFailed   // اتصال به دیتابیس ناموفق
 ```
+<div dir="rtl">
 
 #### الگوی استفاده در HTTP Handler
+
+<div dir="ltr">
 
 ```go
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
@@ -711,8 +767,11 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
     }
 }
 ```
+<div dir="rtl">
 
 #### دسترسی به خطای خام driver
+
+<div dir="ltr">
 
 ```go
 _, err := userRepo.Insert(ctx, params)
@@ -725,8 +784,11 @@ if err != nil {
     }
 }
 ```
+<div dir="rtl">
 
 #### Mapper سفارشی
+
+<div dir="ltr">
 
 ```go
 // اضافه کردن error code های اختصاصی CockroachDB
@@ -745,12 +807,15 @@ func (crdbMapper) Map(err error) error {
 
 database.SetErrorMapper(db.ChainMapper(crdbMapper{}, db.DefaultErrorMapper()))
 ```
+<div dir="rtl">
 
 ---
 
 ### ۶. Batch Operations
 
 #### BatchExec — generic، کارآمد، در یک transaction
+
+<div dir="ltr">
 
 ```go
 type OrderItem struct {
@@ -778,8 +843,11 @@ if err != nil {
     return fmt.Errorf("درج آیتم‌های سفارش ناموفق: %w", err)
 }
 ```
+<div dir="rtl">
 
 #### Batch با بازگشت نتیجه
+
+<div dir="ltr">
 
 ```go
 // BatchInsert در repo — همه کاربران را با ID برمی‌گرداند
@@ -795,8 +863,11 @@ for _, u := range users {
     log.Printf("درج شد: ID=%d, Email=%s", u.ID, u.Email)
 }
 ```
+<div dir="rtl">
 
 #### Batch Update با Transaction دستی
+
+<div dir="ltr">
 
 ```go
 err := database.ExecTx(ctx, func(tx *db.Tx) error {
@@ -817,12 +888,15 @@ err := database.ExecTx(ctx, func(tx *db.Tx) error {
     return nil
 })
 ```
+<div dir="rtl">
 
 ---
 
 ### ۷. Retry و Timeout
 
 #### Timeout برای یک عملیات خاص
+
+<div dir="ltr">
 
 ```go
 // context با timeout برای query حساس به زمان
@@ -838,8 +912,11 @@ if db.IsTimeout(err) {
     log.Println("گزارش خیلی زمان برد — بعداً تلاش کنید")
 }
 ```
+<div dir="rtl">
 
 #### WithRetry — retry هوشمند
+
+<div dir="ltr">
 
 ```go
 // retry فقط برای خطاهای قابل retry
@@ -864,8 +941,11 @@ if err != nil {
     log.Printf("بعد از ۵ تلاش ناموفق: %v", err)
 }
 ```
+<div dir="rtl">
 
 #### DefaultTimeout در سطح Config
+
+<div dir="ltr">
 
 ```go
 // همه query هایی که context بدون deadline دارند
@@ -884,12 +964,15 @@ ctx5s, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 defer cancel()
 rows, err = database.Query(ctx5s, `SELECT * FROM large_table`) // timeout: 5s
 ```
+<div dir="rtl">
 
 ---
 
 ### ۸. سیستم Hook (لاگ / متریک / تریسینگ)
 
 #### LogHook — آماده استفاده
+
+<div dir="ltr">
 
 ```go
 db.NewLogHook(db.LogHookConfig{
@@ -900,6 +983,7 @@ db.NewLogHook(db.LogHookConfig{
     LogArgs:            false,                   // ← در production false بگذارید (PII)
 })
 ```
+<div dir="rtl">
 
 نمونه خروجی لاگ:
 ```json
@@ -909,6 +993,8 @@ db.NewLogHook(db.LogHookConfig{
 ```
 
 #### MetricsHook — با Prometheus
+
+<div dir="ltr">
 
 ```go
 // پیاده‌سازی MetricsCollector برای Prometheus
@@ -945,8 +1031,11 @@ database := db.MustOpen(db.Config{
     },
 })
 ```
+<div dir="rtl">
 
 #### TracingHook — با OpenTelemetry
+
+<div dir="ltr">
 
 ```go
 // پیاده‌سازی Tracer برای OpenTelemetry
@@ -978,8 +1067,11 @@ db.NewTracingHook(&otelTracer{
     tracer: otel.Tracer("sqltoolkit"),
 })
 ```
+<div dir="rtl">
 
 #### Hook سفارشی
+
+<div dir="ltr">
 
 ```go
 // می‌توانید هر Hook دلخواهی بنویسید
@@ -1001,12 +1093,15 @@ func (h *auditHook) AfterQuery(ctx context.Context, query string, args []any, d 
     }
 }
 ```
+<div dir="rtl">
 
 ---
 
 ### ۹. Migration
 
 #### ساختار فایل‌های Migration
+
+<div dir="ltr">
 
 ```
 migrations/
@@ -1017,8 +1112,11 @@ migrations/
 └── 000003_create_orders.up.sql
     000003_create_orders.down.sql
 ```
+<div dir="rtl">
 
 #### نمونه فایل Migration
+
+<div dir="ltr">
 
 ```sql
 -- migrations/000002_add_user_roles.up.sql
@@ -1031,7 +1129,6 @@ CREATE INDEX idx_users_role ON users(role);
 DROP INDEX IF EXISTS idx_users_role;
 ALTER TABLE users DROP COLUMN IF EXISTS role;
 ```
-
 #### اجرا از طریق CLI
 
 ```bash
@@ -1060,6 +1157,8 @@ go run ./cmd/migrate drop
 
 #### اجرای برنامه‌نویسی (Programmatic)
 
+<div dir="ltr">
+
 ```go
 // در صورتی که می‌خواهید migration را هنگام startup اجرا کنید
 import (
@@ -1083,10 +1182,13 @@ func runMigrations(databaseURL string) error {
     return nil
 }
 ```
+<div dir="rtl">
 
 ---
 
 ### ۱۰. Driver سفارشی
+
+<div dir="ltr">
 
 ```go
 // اضافه کردن پشتیبانی از CockroachDB
@@ -1120,6 +1222,7 @@ func init() {
     db.ReplaceDriver(CockroachDriver{})
 }
 ```
+<div dir="rtl">
 
 ---
 
@@ -1151,6 +1254,8 @@ go install github.com/golang/mock/mockgen@latest
 mockgen -source=repo/user_repo.go -destination=mocks/user_repo_mock.go -package=mocks
 ```
 
+<div dir="ltr">
+
 ```go
 // مثال unit test با mock
 func TestUserService_GetUser_NotFound(t *testing.T) {
@@ -1170,8 +1275,11 @@ func TestUserService_GetUser_NotFound(t *testing.T) {
     }
 }
 ```
+<div dir="rtl">
 
 ### Integration Test — با SQLite
+
+<div dir="ltr">
 
 ```go
 func newTestDB(t *testing.T) *db.DB {
@@ -1224,6 +1332,7 @@ func TestUserRepo_Insert_And_GetByID(t *testing.T) {
     }
 }
 ```
+<div dir="rtl">
 
 ---
 
