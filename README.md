@@ -144,42 +144,6 @@ Repository ها هم با `*DB` و هم با `*Tx` کار می‌کنند — ه
 CLI کامل برای مدیریت migration با `golang-migrate`.
 
 ---
-
-## 📁 ساختار پروژه
-
-```
-sqltoolkit/
-│
-├── db/                          # هسته اصلی toolkit
-│   ├── db.go                    # *DB wrapper، pool، Exec/Query/QueryRow
-│   ├── tx.go                    # *Tx wrapper، ExecTx، Querier interface
-│   ├── errors.go                # Sentinel errors + ErrorMapper interface
-│   ├── hooks.go                 # Hook interface + built-in ها
-│   ├── driver.go                # Driver interface + adapters
-│   ├── env.go                   # خواندن environment variable
-│   ├── context_errors.go        # اتصال context sentinels
-│   └── db_test.go               # Unit tests (SQLite in-memory)
-│
-├── models/                      # Domain models — struct های ساده Go
-│   └── user.go
-│
-├── repo/                        # لایه Data Access با SQL های explicit
-│   ├── user_repo.go
-│   └── user_repo_test.go
-│
-├── migrations/                  # فایل‌های SQL برای تغییرات schema
-│   ├── 000001_create_users.up.sql
-│   └── 000001_create_users.down.sql
-│
-├── cmd/
-│   └── migrate/                 # CLI مستقل برای اجرای migration
-│       └── main.go
-│
-├── main.go                      # نمونه‌های کامل استفاده
-├── go.mod
-└── README.md
-```
-
 **چرا این ساختار؟**
 
 - **`db/`** از هر چیزی خارج از standard library مستقل است — قابل استفاده در هر پروژه‌ای.
@@ -200,7 +164,7 @@ sqltoolkit/
 
 ```bash
 # اضافه کردن ماژول به پروژه
-go get github.com/yourorg/sqltoolkit
+go get github.com/Skryldev/sql-toolkit
 
 # driver موردنظر را نصب کنید:
 
